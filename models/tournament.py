@@ -109,7 +109,7 @@ class Tournament:
             "time_control": self.time_control,
             "players": [player.get_serialized_player(save_turnament_score=True) for player in self.players],
             "nb_rounds": self.nb_rounds,
-            "rounds": [],
+            "rounds": [round.get_serialized_round() for round in self.rounds],
             "desc": self.desc
         }
 

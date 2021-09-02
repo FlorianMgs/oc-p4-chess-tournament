@@ -1,7 +1,7 @@
 
 
 class Player:
-    def __init__(self, name, first_name, dob, sex, total_score=0, rank=0):
+    def __init__(self, name, first_name, dob, sex, total_score, rank=0):
         self.name = name
         self.first_name = first_name
         self.dob = dob
@@ -20,8 +20,8 @@ class Player:
             "first_name": self.first_name,
             "dob": self.dob,
             "sex": self.sex,
-            "rank": self.rank,
             "total_score": self.total_score,
+            "rank": self.rank,
         }
         if save_turnament_score:
             serialized_player["tournament_score"] = self.tournament_score

@@ -1,19 +1,39 @@
 from models.tournament import Tournament
 from views.view import View
 from views.tournament import CreateTournament, LoadTournament
+from views.player import LoadPlayer
 from controller.player_controller import create_player, update_rankings
 from controller.database import save_db, load_player, load_tournament
 
 
-def create_tournament(loadPlayers=False):
+def create_tournament():
 
+    menu = View()
     # Récupération des infos du tournoi
     user_entries = CreateTournament().display_menu()
 
+    # Choix chargement joueurs:
+    user_input = menu.get_user_entry(
+        msg_display="Que faire ?\n0 - Créer des joueurs\n1 - Charger des joueurs\n> ",
+        msg_error="Entrez un choix valide.",
+        value_type="selection",
+        assertions=["0", "1"]
+    )
+
     # Chargement des joueurs
-    if loadPlayers:
-        # players = load_player()
-        pass
+    if user_input == "1":
+        players = []
+        user_input = menu.get_user_entry(
+            msg_display="Charger combien de joueurs ?\n> ",
+            msg_error="Entrez 0 ou 1.",
+            value_type="numeric"
+        )
+        serialized_players = LoadPlayer().display_menu(
+            nb_players_to_load=user_input
+        )
+        for serialized_player in serialized_players:
+            player = load_player(serialized_player)
+            players.append(player)
 
     # Creation des joueurs
     else:
@@ -69,15 +89,15 @@ def play_tournament(tournament):
             current_round = tournament.rounds[-1]
             print()
             print(current_round.start_date + " : Début du " + current_round.name)
-            print()
 
             # Round terminé, on passe au round suivant, on peux aussi mettre à jour les classements manuellement
             while True:
+                print()
                 user_input = menu.get_user_entry(
-                    msg_display="Que faire ?\n0 - Round suivant\n1 - Mettre à jour les classements\n2 - Sauvegarder le tournoi\n3 - Charger un tournoi\n> ",
-                    msg_error="Veuillez faire un choix.\n> ",
+                    msg_display="Que faire ?\n0 - Round suivant\n1 - Voir les classements\n2 - Mettre à jour les classements\n3 - Sauvegarder le tournoi\n4 - Charger un tournoi\n> ",
+                    msg_error="Veuillez faire un choix.",
                     value_type="selection",
-                    assertions=["0", "1", "2", "3"]
+                    assertions=["0", "1", "2", "3", "4"]
                 )
                 print()
 
@@ -86,8 +106,14 @@ def play_tournament(tournament):
                     current_round.mark_as_complete()
                     break
 
-                # Changement des rangs
+                # Affichage des classements
                 elif user_input == "1":
+                    print(f"Classement du tournoi {tournament.name}\n:")
+                    for i, player in enumerate(tournament.get_rankings()):
+                        print(f"{str(i + 1)} - {player}")
+
+                # Changement des rangs
+                elif user_input == "2":
                     for player in tournament.players:
                         rank = menu.get_user_entry(
                             msg_display=f"Rang de {player}:\n> ",
@@ -97,11 +123,11 @@ def play_tournament(tournament):
                         update_rankings(player, rank, score=False)
 
                 # Sauvegarder le tournoi
-                elif user_input == "2":
-                    save_db("touranments", tournament.get_serialized_tournament(save_rounds=True))
+                elif user_input == "3":
+                    save_db("tournaments", tournament.get_serialized_tournament(save_rounds=True))
 
                 # Charger un tournoi
-                elif user_input == "3":
+                elif user_input == "4":
                     serialized_loaded_tournament = LoadTournament().display_menu()
                     tournament = load_tournament(serialized_loaded_tournament)
                     new_tournament_loaded = True
@@ -116,8 +142,10 @@ def play_tournament(tournament):
         else:
             break
 
-    # Une fois le tournoi terminé, on retourne les résultats
+    # Une fois le tournoi terminé, on le save dans la bdd puis on retourne les résultats
+    save_db("tournaments", tournament.get_serialized_tournament(save_rounds=True))
     return tournament.get_rankings()
+
 
 
 

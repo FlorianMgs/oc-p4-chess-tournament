@@ -14,10 +14,15 @@ def create_player():
         user_entries['first_name'],
         user_entries['dob'],
         user_entries['sex'],
+        user_entries['total_score'],
         user_entries['rank'])
 
+    # serialization:
+    serialized_player = player.get_serialized_player()
+    print(serialized_player)
+
     # Sauvegarde du joueur dans la database
-    save_db("players", player.get_serialized_player())
+    save_db("players", serialized_player)
 
     return player
 

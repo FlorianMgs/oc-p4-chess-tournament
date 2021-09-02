@@ -14,13 +14,13 @@ class CreateTournament(View):
 
         place = self.get_user_entry(
             msg_display="Lieu:\n> ",
-            msg_error="Veuillez entrer un lieu valide\n> ",
+            msg_error="Veuillez entrer un lieu valide",
             value_type="string"
         )
 
         user_selection_time_control = self.get_user_entry(
             msg_display="Contrôle de temps:\n0 - Bullet\n1 - Blitz\n2 - Coup Rapide\n> ",
-            msg_error="Veuillez entrer 0, 1 ou 2.\n> ",
+            msg_error="Veuillez entrer 0, 1 ou 2.",
             value_type="selection",
             assertions=["0", "1", "2"]
         )
@@ -33,14 +33,14 @@ class CreateTournament(View):
 
         nb_players = self.get_user_entry(
             msg_display="Nombre de joueurs:\n> ",
-            msg_error="Veuillez entrer un nombre entier supérieur ou égal à 2.\n> ",
+            msg_error="Veuillez entrer un nombre entier supérieur ou égal à 2.",
             value_type="num_superior",
             default_value = 2
         )
 
         nb_rounds = self.get_user_entry(
             msg_display="Nombre de tours (4 par défaut):\n> ",
-            msg_error="Veuillez entrer 4 ou plus.\n> ",
+            msg_error="Veuillez entrer 4 ou plus.",
             value_type="num_superior",
             default_value=4
         )
@@ -66,14 +66,15 @@ class LoadTournament(View):
 
         assertions = []
         for i, tournament in enumerate(all_tournaments):
-            display_msg = display_msg + f"{str(i)} - {tournament['name]']}"
-            assertions.append(str(i))
+            display_msg = display_msg + f"{str(i+1)} - {tournament['name']}\n"
+            assertions.append(str(i+1))
 
-        user_input = self.get_user_entry(
+        user_input = int(self.get_user_entry(
             msg_display=display_msg,
             msg_error="Veuillez entrer un nombre entier.",
-            value_type="numeric"
-        )
-        serialized_loaded_tournament = all_tournaments[user_input]
+            value_type="selection",
+            assertions=assertions
+        ))
+        serialized_loaded_tournament = all_tournaments[user_input-1]
 
         return serialized_loaded_tournament
