@@ -1,4 +1,4 @@
-from imports import *
+import random
 from views.view import View
 
 
@@ -53,12 +53,12 @@ class Match:
         self.player2.tournament_score += self.score_player2
 
     def get_serialized_match(self):
-        return json.dumps({
-            "player1": self.player1,
+        return {
+            "player1": self.player1.get_serialized_player(save_turnament_score=True),
             "score_player1": self.score_player1,
             "color_player1": self.color_player1,
-            "player2": self.player2,
+            "player2": self.player2.get_serialized_player(save_turnament_score=True),
             "score_player2": self.score_player2,
             "color_player2": self.color_player2,
             "winner": self.winner
-        })
+        }

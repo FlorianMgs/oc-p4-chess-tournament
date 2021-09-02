@@ -1,4 +1,3 @@
-from imports import *
 
 
 class Player:
@@ -27,4 +26,4 @@ class Player:
         if save_turnament_score:
             serialized_player["tournament_score"] = self.tournament_score
 
-        return json.dumps(serialized_player)
+        return serialized_player

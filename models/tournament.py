@@ -1,4 +1,3 @@
-from imports import *
 from models.round import Round
 
 
@@ -100,14 +99,21 @@ class Tournament:
 
         return sorted_players
 
-    def get_serialized_tournament(self):
-        return json.dumps({
+    def get_serialized_tournament(self, save_rounds=False):
+
+        # Si sauvegarde juste après création, les rounds ne sont pas encore créés.
+        serialized_tournament = {
             "name": self.name,
             "place": self.place,
             "date": self.date,
             "time_control": self.time_control,
             "players": [player.get_serialized_player(save_turnament_score=True) for player in self.players],
             "nb_rounds": self.nb_rounds,
-            "rounds": [round.get_serialized_round() for round in self.rounds],
+            "rounds": [],
             "desc": self.desc
-        })
+        }
+
+        if save_rounds:
+            serialized_tournament["rounds"] = [round.get_serialized_round() for round in self.rounds]
+
+        return serialized_tournament

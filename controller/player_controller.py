@@ -1,9 +1,6 @@
+from controller.database import save_db
 from models.player import Player
-from views.create_player import CreatePlayer
-
-
-def load_players():
-    pass
+from views.player import CreatePlayer
 
 
 def create_player():
@@ -19,6 +16,9 @@ def create_player():
         user_entries['sex'],
         user_entries['rank'])
 
+    # Sauvegarde du joueur dans la database
+    save_db("players", player.get_serialized_player())
+
     return player
 
 
@@ -27,3 +27,5 @@ def update_rankings(player, rank, score=True):
         player.total_score += player.tournament_score
     player.rank = rank
     print(f"Update du rang de {player}:\nScore total: {player.total_score}\nRang: {player.rank}")
+
+

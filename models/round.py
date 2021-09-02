@@ -1,13 +1,20 @@
-from imports import *
-from controller.helpers import get_timestamp
+from controller.timestamp import get_timestamp
 from models.match import Match
 
 
 class Round:
-    def __init__(self, name, players_pairs):
-        self.players_pairs = players_pairs
-        self.matchs = self.create_matchs()
+    def __init__(self, name, players_pairs, load_match=False):
+
         self.name = name
+        self.players_pairs = players_pairs
+
+        # Si on charge une partie, on assigne une liste vide aux matchs de manière a les loader.
+        # Sinon, on les créé normalement
+        if load_match:
+            self.matchs = []
+        else:
+            self.matchs = self.create_matchs()
+
         self.start_date = get_timestamp()
         self.end_date = ""
 
@@ -28,10 +35,18 @@ class Round:
             match.play_match()
 
     def get_serialized_round(self):
-        return json.dumps({
+        ser_players_pairs = []
+        for pair in self.players_pairs:
+            ser_players_pairs.append(
+                (pair[0].get_serialized_player(save_turnament_score=True),
+                 pair[1].get_serialized_player(save_turnament_score=True)
+                 )
+            )
+
+        return {
             "name": self.name,
-            "players_pair": self.players_pairs,
+            "players_pairs": ser_players_pairs,
             "matchs": [match.get_serialized_match() for match in self.matchs],
             "start_date": self.start_date,
             "end_date": self.end_date,
-        })
+        }

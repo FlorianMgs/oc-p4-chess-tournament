@@ -1,5 +1,6 @@
 from views.view import View
-from controller.helpers import get_timestamp
+from controller.timestamp import get_timestamp
+from controller.database import load_db
 
 
 class CreateTournament(View):
@@ -54,3 +55,25 @@ class CreateTournament(View):
             "nb_rounds": nb_rounds,
             "desc": desc
         }
+
+
+class LoadTournament(View):
+
+    def display_menu(self):
+
+        all_tournaments = load_db("tournaments")
+        display_msg = "Choisir un tournoi à charger:\n"
+
+        assertions = []
+        for i, tournament in enumerate(all_tournaments):
+            display_msg = display_msg + f"{str(i)} - {tournament['name]']}"
+            assertions.append(str(i))
+
+        user_input = self.get_user_entry(
+            msg_display=display_msg,
+            msg_error="Veuillez entrer un nombre entier.",
+            value_type="numeric"
+        )
+        serialized_loaded_tournament = all_tournaments[user_input]
+
+        return serialized_loaded_tournament
