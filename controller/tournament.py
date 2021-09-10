@@ -92,7 +92,12 @@ def play_tournament(tournament, new_tournament_loaded=False):
             while True:
                 print()
                 user_input = menu.get_user_entry(
-                    msg_display="Que faire ?\n0 - Round suivant\n1 - Voir les classements\n2 - Mettre à jour les classements\n3 - Sauvegarder le tournoi\n4 - Charger un tournoi\n> ",
+                    msg_display="Que faire ?\n"
+                                "0 - Round suivant\n"
+                                "1 - Voir les classements\n"
+                                "2 - Mettre à jour les classements\n"
+                                "3 - Sauvegarder le tournoi\n"
+                                "4 - Charger un tournoi\n> ",
                     msg_error="Veuillez faire un choix.",
                     value_type="selection",
                     assertions=["0", "1", "2", "3", "4"]
@@ -154,8 +159,3 @@ def play_tournament(tournament, new_tournament_loaded=False):
                 t_player.rank = str(i+1)
     update_db("tournaments", tournament.get_serialized_tournament(save_rounds=True))
     return rankings
-
-
-
-
-

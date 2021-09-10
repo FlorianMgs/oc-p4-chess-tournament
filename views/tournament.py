@@ -35,7 +35,7 @@ class CreateTournament(View):
             msg_display="Nombre de joueurs:\n> ",
             msg_error="Veuillez entrer un nombre entier supérieur ou égal à 2.",
             value_type="num_superior",
-            default_value = 2
+            default_value=2
         )
 
         nb_rounds = self.get_user_entry(

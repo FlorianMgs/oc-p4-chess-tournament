@@ -67,7 +67,10 @@ if __name__ == "__main__":
                 elif user_input == "0":
                     while True:
                         user_input = menu.get_user_entry(
-                            msg_display="Voir le classement:\n0 - Par rang\n1 - Par ordre alphabétique\nr - Retour\n> ",
+                            msg_display="Voir le classement:\n"
+                                        "0 - Par rang\n"
+                                        "1 - Par ordre alphabétique\n"
+                                        "r - Retour\n> ",
                             msg_error="Veuillez faire un choix valide.",
                             value_type="selection",
                             assertions=["0", "1", "r"]

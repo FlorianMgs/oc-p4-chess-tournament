@@ -108,13 +108,3 @@ def load_match(serialized_match, tournament):
     loaded_match.winner = serialized_match["winner"]
 
     return loaded_match
-
-
-
-
-
-
-
-
-
-

@@ -44,7 +44,7 @@ class Report(View):
                     print(f"Détails du joueur {selected_player['name']}:")
                     print(f"Rang: {selected_player['rank']}\n"
                           f"Score total: {selected_player['total_score']}\n"
-                          f"Nom: {selected_player['name']}\n" 
+                          f"Nom: {selected_player['name']}\n"
                           f"Prénom: {selected_player['first_name']}\n"
                           f"Date de naissance: {selected_player['dob']}\n"
                           f"Sexe: {selected_player['sex']}\n"
@@ -193,8 +193,10 @@ class Report(View):
                             selected_match = selected_round['matchs'][int(user_input) - 1]
                             while True:
                                 print(f"Détails du {selected_match['name']}\n"
-                                      f"Joueur 1 ({selected_match['color_player1']}): {selected_match['player1']['name']} ({selected_match['score_player1']} pts)\n"
-                                      f"Joueur 2 ({selected_match['color_player2']}): {selected_match['player2']['name']} ({selected_match['score_player2']} pts)\n"
+                                      f"Joueur 1 ({selected_match['color_player1']}): " +
+                                      f"{selected_match['player1']['name']} ({selected_match['score_player1']} pts)\n"
+                                      f"Joueur 2 ({selected_match['color_player2']}): " +
+                                      f"{selected_match['player2']['name']} ({selected_match['score_player2']} pts)\n"
                                       f"Gagnant: {selected_match['winner']}\n"
                                       )
                                 user_input = self.get_user_entry(

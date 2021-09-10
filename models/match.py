@@ -33,7 +33,12 @@ class Match:
         # Match joué, on rentre les scores
         print()
         winner = View().get_user_entry(
-            msg_display=f"{self.player1.first_name} ({self.color_player1}) VS {self.player2.first_name} ({self.color_player2})\nGagnant ?\n0 - {self.player1.first_name} ({self.color_player1})\n1 - {self.player2.first_name} ({self.color_player2})\n2 - Égalité\n> ",
+            msg_display=f"{self.player1.first_name} ({self.color_player1}) VS " +
+                        f"{self.player2.first_name} ({self.color_player2})\n"
+                        f"Gagnant ?\n"
+                        f"0 - {self.player1.first_name} ({self.color_player1})\n"
+                        f"1 - {self.player2.first_name} ({self.color_player2})\n"
+                        f"2 - Égalité\n> ",
             msg_error="Veuillez entrer 0, 1 ou 2.",
             value_type="selection",
             assertions=["0", "1", "2"]

@@ -35,5 +35,3 @@ def update_rankings(player, rank, score=True):
     print(serialized_player['name'])
     update_player_rank("players", serialized_player)
     print(f"Update du rang de {player}:\nScore total: {player.total_score}\nRang: {player.rank}")
-
-
