@@ -2,8 +2,8 @@ from models.tournament import Tournament
 from views.view import View
 from views.tournament import CreateTournament, LoadTournament
 from views.player import LoadPlayer
-from controller.player_controller import create_player, update_rankings
-from controller.database import save_db, load_player, load_tournament
+from controller.player import create_player, update_rankings
+from controller.database import save_db, update_db, load_player, load_tournament
 
 
 def create_tournament():
@@ -58,14 +58,12 @@ def create_tournament():
     return tournament
 
 
-def play_tournament(tournament):
+def play_tournament(tournament, new_tournament_loaded=False):
 
     menu = View()
     print()
     print(f"Début du tournoi {tournament.name}")
     print()
-
-    new_tournament_loaded = False
 
     while True:
 
@@ -124,7 +122,12 @@ def play_tournament(tournament):
 
                 # Sauvegarder le tournoi
                 elif user_input == "3":
-                    save_db("tournaments", tournament.get_serialized_tournament(save_rounds=True))
+                    rankings = tournament.get_rankings()
+                    for i, player in enumerate(rankings):
+                        for t_player in tournament.players:
+                            if player.name == t_player.name:
+                                t_player.rank = str(i + 1)
+                    update_db("tournaments", tournament.get_serialized_tournament(save_rounds=True))
 
                 # Charger un tournoi
                 elif user_input == "4":
@@ -143,8 +146,14 @@ def play_tournament(tournament):
             break
 
     # Une fois le tournoi terminé, on le save dans la bdd puis on retourne les résultats
-    save_db("tournaments", tournament.get_serialized_tournament(save_rounds=True))
-    return tournament.get_rankings()
+    rankings = tournament.get_rankings()
+    for i, player in enumerate(rankings):
+        for t_player in tournament.players:
+            if player.name == t_player.name:
+                t_player.total_score += player.tournament_score
+                t_player.rank = str(i+1)
+    update_db("tournaments", tournament.get_serialized_tournament(save_rounds=True))
+    return rankings
 
 
 

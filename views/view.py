@@ -53,3 +53,17 @@ class View:
                 if not date.isnumeric():
                     return False
             return True
+
+    @staticmethod
+    def build_selection(iterable: list, display_msg: str, assertions: list) -> dict:
+        display_msg = display_msg
+        assertions = assertions
+
+        for i, data in enumerate(iterable):
+            display_msg = display_msg + f"{i+1} - {data['name']}\n"
+            assertions.append(str(i + 1))
+
+        return {
+            "msg": display_msg,
+            "assertions": assertions
+            }

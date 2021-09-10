@@ -3,7 +3,7 @@ from views.view import View
 
 
 class Match:
-    def __init__(self, players_pair):
+    def __init__(self, name, players_pair):
         self.player1 = players_pair[0]
         self.score_player1 = 0
         self.color_player1 = ""
@@ -11,6 +11,7 @@ class Match:
         self.score_player2 = 0
         self.color_player2 = ""
         self.winner = ""
+        self.name = name
 
     def __repr__(self):
         return ([self.player1, self.score_player1],
@@ -32,7 +33,7 @@ class Match:
         # Match joué, on rentre les scores
         print()
         winner = View().get_user_entry(
-            msg_display=f"{self.player1.first_name} ({self.color_player1}) VS {self.player2.first_name} ({self.color_player2})\nGagnant ?\n0 - {self.player1.first_name} ({self.color_player1})\n1 - {self.player2.first_name} {self.player1.name} ({self.color_player2})\n2 - Égalité\n> ",
+            msg_display=f"{self.player1.first_name} ({self.color_player1}) VS {self.player2.first_name} ({self.color_player2})\nGagnant ?\n0 - {self.player1.first_name} ({self.color_player1})\n1 - {self.player2.first_name} ({self.color_player2})\n2 - Égalité\n> ",
             msg_error="Veuillez entrer 0, 1 ou 2.",
             value_type="selection",
             assertions=["0", "1", "2"]
@@ -60,5 +61,6 @@ class Match:
             "player2": self.player2.get_serialized_player(save_turnament_score=True),
             "score_player2": self.score_player2,
             "color_player2": self.color_player2,
-            "winner": self.winner
+            "winner": self.winner,
+            "name": self.name
         }

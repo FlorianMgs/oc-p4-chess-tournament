@@ -1,5 +1,5 @@
-import json
 from tinydb import TinyDB
+from tinydb import where
 from models.player import Player
 from models.tournament import Tournament
 from models.round import Round
@@ -8,23 +8,23 @@ from models.match import Match
 
 def save_db(db_name, serialized_data):
     db = TinyDB("data/" + db_name + ".json")
+    db.insert(serialized_data)
+    print(f"{serialized_data['name']} sauvegardé avec succès.")
 
-    # Check si l'objet que l'on tente de save n'est pas déjà présent dans la db
-    not_in_db = True
-    for item in db:
-        if serialized_data["name"] != item["name"]:
-            not_in_db = True
-        else:
-            not_in_db = False
-            break
 
-    # Si pas présent, on save, sinon on l'update
-    if not_in_db:
-        db.insert(serialized_data)
-        print(f"{serialized_data['name']} sauvegardé avec succès.")
-    else:
-        db.update(serialized_data)
-        print(f"{serialized_data['name']} updaté avec succès.")
+def update_db(db_name, serialized_data):
+    db = TinyDB("data/" + db_name + ".json")
+    db.update(serialized_data)
+    print(f"{serialized_data['name']} updaté avec succès.")
+
+
+def update_player_rank(db_name, serialized_data):
+    db = TinyDB("data/" + db_name + ".json")
+    db.update(
+            {'rank': serialized_data['rank'], 'total_score': serialized_data['total_score']},
+            where('name') == serialized_data['name']
+    )
+    print(f"{serialized_data['name']} updaté avec succès.")
 
 
 def load_db(db_name):
@@ -98,7 +98,8 @@ def load_match(serialized_match, tournament):
             player2 = player
 
     loaded_match = Match(
-        (player1, player2)
+        players_pair=(player1, player2),
+        name=serialized_match['name']
     )
     loaded_match.score_player1 = serialized_match["score_player1"]
     loaded_match.color_player1 = serialized_match["color_player1"]
