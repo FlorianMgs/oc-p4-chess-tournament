@@ -1,3 +1,4 @@
+from pathlib import Path
 from tinydb import TinyDB
 from tinydb import where
 from models.player import Player
@@ -7,19 +8,26 @@ from models.match import Match
 
 
 def save_db(db_name, serialized_data):
-    db = TinyDB("data/" + db_name + ".json")
+    Path("data/").mkdir(exist_ok=True)
+    try:
+        db = TinyDB(f"data/{db_name}.json")
+    except FileNotFoundError:
+        with open(f"data/{db_name}.json", "w"):
+            pass
+        db = TinyDB("data/" + db_name + ".json")
+
     db.insert(serialized_data)
     print(f"{serialized_data['name']} sauvegardé avec succès.")
 
 
 def update_db(db_name, serialized_data):
-    db = TinyDB("data/" + db_name + ".json")
+    db = TinyDB(f"data/{db_name}.json")
     db.update(serialized_data)
     print(f"{serialized_data['name']} updaté avec succès.")
 
 
 def update_player_rank(db_name, serialized_data):
-    db = TinyDB("data/" + db_name + ".json")
+    db = TinyDB(f"data/{db_name}.json")
     db.update(
             {'rank': serialized_data['rank'], 'total_score': serialized_data['total_score']},
             where('name') == serialized_data['name']
@@ -28,7 +36,7 @@ def update_player_rank(db_name, serialized_data):
 
 
 def load_db(db_name):
-    db = TinyDB("data/" + db_name + ".json")
+    db = TinyDB(f"data/{db_name}.json")
     return db.all()
 
 
