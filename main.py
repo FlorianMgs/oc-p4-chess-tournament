@@ -9,18 +9,6 @@ from views.view import View
 
 menu = View()
 
-# from contextlib import suppress
-#
-# try:
-#     bar = a['foo']
-# except KeyError:
-#     pass
-#
-# with suppress(KeyError):
-#     bar = a['foo']
-#     return True
-# return False
-
 if __name__ == "__main__":
 
     while True:

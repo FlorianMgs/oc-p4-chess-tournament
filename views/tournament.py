@@ -62,19 +62,21 @@ class LoadTournament(View):
     def display_menu(self):
 
         all_tournaments = load_db("tournaments")
-        display_msg = "Choisir un tournoi à charger:\n"
+        if all_tournaments:
 
-        assertions = []
-        for i, tournament in enumerate(all_tournaments):
-            display_msg = display_msg + f"{str(i+1)} - {tournament['name']}\n"
-            assertions.append(str(i+1))
+            builded_selection = self.build_selection(iterable=all_tournaments,
+                                                     display_msg="Choisir un tournoi:\n",
+                                                     assertions=[])
 
-        user_input = int(self.get_user_entry(
-            msg_display=display_msg,
-            msg_error="Veuillez entrer un nombre entier.",
-            value_type="selection",
-            assertions=assertions
-        ))
-        serialized_loaded_tournament = all_tournaments[user_input-1]
+            user_input = int(self.get_user_entry(
+                msg_display=builded_selection['msg'] + "\n> ",
+                msg_error="Veuillez entrer un nombre entier.",
+                value_type="selection",
+                assertions=builded_selection['assertions']
+            ))
+            serialized_loaded_tournament = all_tournaments[user_input-1]
 
-        return serialized_loaded_tournament
+            return serialized_loaded_tournament
+
+        else:
+            return False
